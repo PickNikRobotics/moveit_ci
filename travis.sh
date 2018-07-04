@@ -81,14 +81,8 @@ if [ "$IN_DOCKER" -eq 0 ]; then
   travis_run ls -a
 
   # Choose the correct CI container to use
-  case "$ROS_REPO" in
-    ros-shadow-fixed)
-      export DOCKER_IMAGE=moveit/moveit:$ROS_DISTRO-ci-shadow-fixed
-      ;;
-    *)
-      export DOCKER_IMAGE=moveit/moveit:$ROS_DISTRO-ci
-      ;;
-  esac
+  export DOCKER_IMAGE=ros:$ROS_DISTRO-ros-base
+
   echo "Starting Docker image: $DOCKER_IMAGE"
 
   # Pull first to allow us to hide console output
