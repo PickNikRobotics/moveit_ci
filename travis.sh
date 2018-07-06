@@ -151,6 +151,12 @@ travis_run_true glxinfo
 # Setup rosdep - note: "rosdep init" is already setup in base ROS Docker image
 travis_run rosdep update
 
+pwd
+
+travis_run cd /root/ws_moveit/src/$REPOSITORY_NAME
+
+ls -a
+
 # Run before script
 if [ "${BEFORE_SCRIPT// }" != "" ]; then
     travis_run sh -c "${BEFORE_SCRIPT}";
