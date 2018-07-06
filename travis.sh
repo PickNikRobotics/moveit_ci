@@ -153,11 +153,19 @@ travis_run rosdep update
 
 # Run before script
 if [ "${BEFORE_SCRIPT// }" != "" ]; then
-    travis_run sh -c "${BEFORE_SCRIPT}";
+  echo "Running before script"
+  pwd
+  travis_run cd $REPOSITORY_NAME
+  pwd
+  travis_run sh -c "${BEFORE_SCRIPT}";
+  cd ..
+  pwd
 fi
 
 # Install source-based package dependencies
-travis_run rosdep install -y -q -n --from-paths . --ignore-src --rosdistro $ROS_DISTRO
+#travis_run rosdep install -y -q -n --from-paths . --ignore-src --rosdistro $ROS_DISTRO
+# TODO(davetcoleman): remove the -r argument: continue installation despite errors
+travis_run rosdep install -y -r -q -n --from-paths . --ignore-src --rosdistro $ROS_DISTRO
 
 # Change to base of workspace
 travis_run cd ..
