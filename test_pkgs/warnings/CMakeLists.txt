@@ -1,17 +1,21 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(warnings)
 
-add_compile_options(-std=c++14)
-find_package(catkin REQUIRED)
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
 
-message(WARNING "Dummy cmake warning for unittest")
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-W -Wall -Wextra
+    -Wwrite-strings -Wunreachable-code -Wpointer-arith
+    -Winit-self -Wredundant-decls
+    -Wno-unused-parameter -Wno-unused-function)
+endif()
 
-catkin_package()
+find_package(ament_cmake REQUIRED)
 
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
-
-if(CATKIN_ENABLE_TESTING)
-  catkin_add_gtest(${PROJECT_NAME} test.cpp)
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(${PROJECT_NAME} test.cpp)
 endif()
