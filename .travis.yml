@@ -14,7 +14,7 @@ notifications:
        - dave@dav.ee
 env:
   global: # default values
-    - ROS_DISTRO=melodic
+    - ROS_DISTRO=crystal
     - ROS_REPO=ros
     - SCRIPT=travis.sh
   matrix:

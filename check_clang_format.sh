@@ -9,9 +9,10 @@ travis_run_simple --display "cd to repository source: $CI_SOURCE_PATH" cd $CI_SO
 travis_run apt-get -qq install -y clang-format-3.9
 
 # Ensure that a .clang-format config file is present, if not download from MoveIt
+# TODO(mlautman): revert the url to use $ROS_DISTRO-devel once the moveit2 crystal-devel branch is ready
 if [ ! -f .clang-format ]; then
     travis_run --title "Fetching default clang-format config from MoveIt" \
-        wget -nv "https://raw.githubusercontent.com/ros-planning/moveit/$ROS_DISTRO-devel/.clang-format"
+        wget -nv "https://raw.githubusercontent.com/ros-planning/moveit/melodic-devel/.clang-format"
 fi
 
 # Run clang-format
