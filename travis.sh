@@ -268,7 +268,12 @@ function test_workspace() {
    test -n "$blacklist_pkgs" && catkin config --append-args --blacklist $blacklist_pkgs &> /dev/null
 
    # Build tests
-   BUILD_WHITELIST=$(unify_list " ,;" ${BUILD_WHITELIST:-})
+   build_pkgs=$(unify_list " ,;" ${BUILD_WHITELIST:-})
+   echo -e $(colorize YELLOW Test whitelist pre-filter: $(colorize THIN $build_pkgs))
+   echo -e $(colorize YELLOW Test blacklist: $(colorize THIN $TEST_BLACKLIST))
+   build_pkgs=$(filter_out "$TEST_BLACKLIST" "$build_pkgs")
+   echo -e $(colorize YELLOW Test whitelist post-filter: $(colorize THIN $build_pkgs))
+   echo -e $(colorize YELLOW Test blacklist: $(colorize THIN $TEST_BLACKLIST))
    travis_run_wait --title "catkin build tests" catkin build --no-status --summarize --make-args tests -- $BUILD_WHITELIST
    # Run tests, suppressing the output (confuses Travis display?)
    travis_run_wait --title "catkin run_tests" "catkin build --catkin-make-args run_tests -- --no-status --summarize 2>/dev/null"
