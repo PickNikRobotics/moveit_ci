@@ -46,6 +46,9 @@ function run_docker() {
        esac
     fi
 
+    # make build directory to copy build products into for code coverage reporting
+    [[ "${TEST:=}" == *code-coverage* ]] && mkdir -p $(pwd)/build
+
     echo -e $(colorize BOLD "Starting Docker image: $DOCKER_IMAGE")
     travis_run docker pull $DOCKER_IMAGE
 
@@ -137,6 +140,9 @@ function run_early_tests() {
             ;;
          abi)  # abi-checker requires debug symbols
             CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS_DEBUG=\"-g -Og\""
+            ;;
+         code-coverage) # code coverage test requres special build instructions
+            CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_CODE_COVERAGE_CONFIG=ON"
             ;;
          *)
             echo -e $(colorize RED "Unknown TEST: $t")
@@ -281,6 +287,9 @@ function test_workspace() {
 
    # Show test results summary and throw error if necessary
    catkin_test_results || exit 2
+
+   # Copy build products for code coverage reporting
+   [[ "${TEST:=}" == *code-coverage* ]] && travis_run_simple cp -r $ROS_WS/build /root/$REPOSITORY_NAME
 }
 
 ###########################################################################################################
